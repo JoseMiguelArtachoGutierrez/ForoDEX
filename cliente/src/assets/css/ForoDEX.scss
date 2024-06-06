@@ -1,0 +1,69 @@
+.forodexContainer{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    gap: 1rem;
+    &>h1{
+        padding-top: 2rem;
+        color: $color-cuaternario;
+        font-weight: bold;
+        font-size: 4rem;
+        -webkit-text-stroke-width: 1px;
+        -webkit-text-stroke-color: $color-secundario;
+        font-family:$fuente-principal ;
+        text-align: center;
+    }
+    &>*:last-child{
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        &>*:first-child{
+            display: flex;
+            &>*{
+                border: none;
+                padding: 1rem;
+                background-color: $color-principal;
+                border-top: 3px solid $color-secundario;
+                color: white;
+                font-family: $fuente-principal;
+                font-size: large;
+                &:hover{
+                    transition: 0.5s ease;
+                    background-color: $color-secundario;
+                }
+            }
+            &>*:nth-child(1){
+                border-left: 3px solid $color-secundario;
+                border-top-left-radius: 5px;
+            }
+            &>*:nth-child(2){
+                border-left: 3px solid $color-secundario;
+                border-right: 3px solid $color-secundario;
+            }
+            &>*:nth-child(3){
+                border-right: 3px solid $color-secundario;
+                border-top-right-radius: 5px;
+            }
+        }
+        &>*:last-child{
+            background-color: $color-principal;
+            border: 3px solid $color-secundario;
+            width: 100%;
+            border-radius: 5px;
+            border-top-left-radius: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 35rem;
+        }
+        @include mediaQuery(mobile){
+            width: 100%;
+        }
+    }
+}

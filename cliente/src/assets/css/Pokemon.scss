@@ -1,0 +1,235 @@
+
+.pokemon{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding-bottom: 2rem;
+    & h1{
+        padding-top: 2rem;
+        color: $color-cuaternario;
+        font-weight: bold;
+        font-size: 4rem;
+        -webkit-text-stroke-width: 1px;
+        -webkit-text-stroke-color: $color-secundario;
+        font-family:$fuente-principal ;
+        text-align: center;
+    }
+    .galeria{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        gap: 1rem;
+        
+        &>div{
+            display: flex;
+            align-items: center;
+
+            width: 375px;
+            height: 275px;
+            &>.galeriaImagen{
+                border-radius: 50%;
+                border: 2px solid $color-secundario;
+                width: 275px;
+                height: 275px;
+                overflow: hidden;
+                display: flex;
+                flex-wrap: wrap;
+                &>div{
+                    border-radius: 50%;
+                    padding: 2rem;
+                    width: 100%;
+                    height: 100%;
+                    &>img{
+                        border-radius: 50%;
+                    }
+                }
+            }
+        }
+        
+    }
+    .grafica{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        &>.radar{
+            height: auto;
+            width: 375px;
+        }
+    }
+    .datospokemon{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        & h4{
+            font-family: $fuente-principal;
+            color: $color-secundario;
+            font-size: xx-large;
+            font-weight: bold;
+            text-align: center;
+        }
+        &>p{
+            color: $color-principal;
+            &>span{
+                color: $color-secundario;
+            }
+        }
+        &>.tipos{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            &>*:last-child{
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 1rem;
+                &>*{
+                    width: calc(25% - 0.5rem);
+                }
+            }
+        }
+        &>.habilidades{
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            &>ul{
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                &>li{
+                    display: flex;
+                    gap: 5px;
+                    &>p{
+                        margin: 0;
+                        color: $color-principal;
+                    }
+                    &>div{
+                        &>button{
+                            border: none;
+                            background-color: transparent;
+                            &::after{
+                                border-top: .3em solid $color-secundario;
+                            }
+                        }
+                        &>ul{
+                            padding: 1rem;
+                            background-color: $color-secundario !important;
+                            z-index: 10 !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .movimientos{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        &>table{
+           
+            width: 80%;
+            & th, & td{
+                text-align: center;
+            }
+            &>thead>tr{
+                background-color: $color-secundario;
+                color: white;
+                &>*{
+                    font-family: $fuente-principal;
+                    padding: 0.5rem 0 0.5rem 0;
+                    font-size: larger;
+                }
+                &>:nth-child(2){
+                    border-left: 2px solid $fondo;
+                    border-right: 2px solid $fondo;
+                }
+            }
+            &>tbody{
+                &>tr{
+                    border-top: 2px solid $fondo;
+                    &>td{
+                        padding: 0.5rem 0 0.5rem 0;
+                        background-color: $color-terciario;
+                        color: $color-secundario;
+                    }
+                    &>td:nth-child(2){
+                        border-left: 2px solid $fondo;
+                        border-right: 2px solid $fondo;
+                    }
+                    &>td:last-child{
+                        &>button{
+                            border: 2px solid $color-secundario;
+                            padding: 0.5rem 1rem 0.5rem 1rem;
+                            background-color: $color-secundario;
+                            color: white;
+                            border-radius: 5px;
+                            &:hover{
+                                
+                                transition: 0.5s ease;
+                                font-weight: bold;
+                                background-color: $fondo;
+                                color: $color-secundario;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        @include mediaQuery(mobile){
+            &>table{
+                width: 95%;
+            }
+        }
+    }
+    @include mediaQuery(tablet){
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        & h1{
+            padding-top: 0;
+        }
+        &>article{
+            width: 100% !important;
+        }
+    }
+    @include mediaQuery(mobile){
+        .grafica{
+            &>.radar{
+                width: 100% !important;
+            }
+        }
+        .galeria{
+            &>div{
+                width: 100% !important;
+                &>.galeriaImagen{
+                    width: 100% !important;
+                }
+            }
+        }
+    }
+}
+.spinnerSection{
+    background-color: $fondo;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+

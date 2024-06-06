@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Irish+Grover&family=Orelega+One&display=swap');
+
+$fuente-principal: "Irish Grover", system-ui ;
+$fuente-secundaria: "Orelega One", serif;
+// Colores
+
+$fondo:#DDEFE3;
+$color-principal:#33844E;
+$color-secundario:#004316;
+$color-terciario: #61A176;
+$color-cuaternario:#8FC09F;
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: $fuente-secundaria;
+}
+#root>*:nth-child(2){
+    padding-top: 5rem;
+}
+#root{
+    background-color: $fondo;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+@mixin mediaQuery($tamaño) { // Responsivo
+    @if $tamaño == "tablet" {
+        @media screen and (max-width: 950px) {
+            @content;
+        }
+    }
+    @if $tamaño =="mitad"{
+        @media screen and (max-width: 700px) {
+            @content;
+        }
+    }
+    @if $tamaño == "mobile" {
+        @media screen and (max-width: 400px) {
+            @content;
+        }
+    }
+}

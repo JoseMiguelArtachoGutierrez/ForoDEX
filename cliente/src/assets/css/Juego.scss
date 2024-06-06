@@ -1,0 +1,193 @@
+.juego{
+    margin: 2rem;
+    width: 100%;
+    border-radius: 5px;
+    background-color: $color-cuaternario;
+    min-height: 33rem;
+    padding: 1rem;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    &>div{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        &>.botonBuscar{
+            padding: 1rem 2rem 1rem 2rem;
+            background-color: $color-principal;
+            border-radius: 5px;
+            border: 3px solid $color-secundario;
+            color: white;
+            font-family: $fuente-principal;
+            font-weight: bold;
+            transition: 0.5s ease;
+            
+            z-index: 10;
+            &:hover{
+                cursor: pointer;
+                transition: 0.5s ease;
+                transform: scale(1.1);
+                background-color: $color-secundario;
+            }
+        }
+        &>.pokeballsDiarias{
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            display: flex;
+            &>*{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                &>div{
+                    width: 3rem;
+                    height: 3rem;
+                    &>img{
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                &>p{
+                    margin: 0;
+                    font-weight: bold;
+                    font-family: $fuente-principal;
+                }
+            }
+        }
+        &>.pokemonBuscado{
+            height: 16rem;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 3rem;
+            &>.pokemonAcapturar{
+                width: 175px !important;
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+                max-height: 200px !important;
+                overflow: visible;
+                
+                opacity: 0;
+                &::after{
+                    content: "";
+                    width: 200px;
+                    height: 50%;
+                    position: absolute;
+                    top: 60%;
+                    background-color: $color-secundario;
+                    z-index: 5; 
+                    border-radius: 50%;
+
+                }
+                &>img{
+                    z-index: 10;
+                }
+            }
+            @keyframes encontrarPokemon {
+                0%{
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                100%{
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+        }
+        &>.misPokeballs{
+            height:16rem;
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+            &>div:first-child{
+                padding-left: 2rem;
+                display: flex;
+                align-items: center;
+                &>*:nth-child(2){
+                    width: 200px;
+                    height: 200px;
+                    border: 3px solid $color-secundario;
+                    border-radius: 50%;
+                    &:hover{
+                        animation: agitar 1s infinite ease forwards;
+                        cursor: pointer;
+                        &>img{
+                            transition: 0.5s ease;
+                            transform: scale(1.1);
+                        }
+                    }
+                    @keyframes agitar {
+                        0%{
+                            transform: rotateZ(0);
+                        }
+                        33.33%{
+                            transform: rotateZ(25deg);
+                        }
+                        66.33%{
+                            transform: rotateZ(0);
+                        }
+                        100%{
+                            transform: rotateZ(-25deg);
+                        }
+                    }
+                    &>img{
+                        width: 100%;
+                        height: 100%;
+                    }
+
+                }
+                &>.noPokeball{
+                    display: flex;
+                    align-items: center;
+                    flex-direction: column;
+                    justify-content: center;
+                    &>p{
+                        margin: 0;
+                        color: $color-secundario;
+                        font-weight: bold;
+                        font-family: $fuente-principal;
+                        width: 80%;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+        @include mediaQuery (mitad){
+            &>.pokeballsDiarias{
+                position: unset;
+            }
+            &>*{
+                justify-content: center !important;
+            }
+            &>*:nth-child(2){
+                padding: 0 !important;
+            }
+            &>.misPokeballs{
+
+                &>*{
+                    padding: 0  !important;
+                }
+                
+                &>*:first-child{
+                    &>*:nth-child(2){
+                        width: 150px !important;
+                        height: 150px !important;
+                    }
+                }
+            }
+        }
+        
+    }
+    @include mediaQuery (mobile){
+            margin: 1rem;
+            padding: 0.5rem;
+    }
+}
