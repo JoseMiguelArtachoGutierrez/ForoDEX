@@ -41,11 +41,12 @@
                 display: flex;
                 flex-wrap: wrap;
                 gap: 1rem;
-                width: calc(50px + 1rem);
                 &>*{
                     position: relative;
                     &:hover{
                         cursor: pointer;
+                        transition: 0.5s ease;
+                        transform: scale(1.2);
                         &>svg path{
                             transition: 0.5s ease;
                             fill: $color-secundario;

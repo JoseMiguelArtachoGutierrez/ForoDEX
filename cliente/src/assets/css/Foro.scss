@@ -1,0 +1,36 @@
+.foro{
+    width: 100%;
+    height: 100%;
+    
+    &>section{
+        width: 100%;
+        min-height: 35rem;
+        &>.headerSection{
+            width: 100%;
+            display: flex;
+            border-bottom: 3px solid $color-secundario;
+            &>button{
+                width: 50%;
+                border: 0;
+                background-color: $color-secundario;
+                padding: 1rem;
+                color: white;
+                font-weight: bold;
+                font-family: $fuente-principal;
+                &:last-child{
+                    border-left: 3px solid $color-secundario;
+                }
+                &:not(.active):hover{
+                    transition: 0.5s ease;
+                    background-color: $color-terciario;
+                    color: $color-secundario;
+                }
+                &.active{
+                    background-color: $color-terciario;
+                    color: $color-secundario;
+                }
+            }
+            
+        }
+    }
+}

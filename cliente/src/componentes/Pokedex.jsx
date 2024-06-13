@@ -54,8 +54,6 @@ function Pokedex() {
               throw new Error('Failed to fetch data');
             }
             const datosPokemon = await response.json();
-
-            url=datosPokemon.next
             datosPokemon.results.forEach(element => {
                 cargarDatosPokemon(element.url);
             });
@@ -131,7 +129,7 @@ function Pokedex() {
             <section>
                 <h1>Pokedex</h1>
                 <div>
-                    <input type="text" placeholder="Buscar Pokemon" onChange={(e)=>{setbuscador(e.target.value)}} />
+                    <input type="text" placeholder="Search Pokemon" onChange={(e)=>{setbuscador(e.target.value.toLowerCase())}} />
                     
                     <button onClick={()=>{setMostrarFiltros(!mostrarFiltros)}}>
                         <span className="linea"></span>

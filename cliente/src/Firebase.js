@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore,collection, addDoc, setDoc,updateDoc,getDoc,doc } from "firebase/firestore";
+import { getDatabase } from "firebase/database";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -10,6 +11,7 @@ import { getFirestore,collection, addDoc, setDoc,updateDoc,getDoc,doc } from "fi
 const firebaseConfig = {
   apiKey: "AIzaSyCXCPqVDiGPVc7Y2LR0NPnuKsQjXkyaI6Y",
   authDomain: "forodex-48282.firebaseapp.com",
+  databaseURL:"https://forodex-48282-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "forodex-48282",
   storageBucket: "forodex-48282.appspot.com",
   messagingSenderId: "68784879721",
@@ -22,4 +24,5 @@ const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const database = getDatabase(app);
 export default app;

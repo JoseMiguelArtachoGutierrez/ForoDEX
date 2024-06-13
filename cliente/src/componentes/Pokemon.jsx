@@ -64,13 +64,28 @@ function Pokemon() {
         const images = [];
       
         function recurse(obj) {
-          for (let key in obj) {
-            if (typeof obj[key] === 'string' && obj[key].startsWith('https') && (obj[key].endsWith('.png') || obj[key].endsWith('.gif') || obj[key].endsWith('.svg'))) {
-              images.push(<div className=""><img src={obj[key]} className="w-100 h-100" alt="" key={obj[key]} /></div>);
-            } else if (typeof obj[key] === 'object' && obj[key] !== null) {
-              recurse(obj[key]);
+            for (let key in obj) {
+                if (typeof obj[key] === 'string' && obj[key].startsWith('https') && 
+                    (obj[key].endsWith('.png') || obj[key].endsWith('.gif') || obj[key].endsWith('.svg'))) {
+                    
+                    // Verificaciones adicionales
+                    const url = obj[key];
+                    let className = '';
+    
+                    if (url.endsWith('.gif') || url.includes('/x-y/')) {
+                        className = 'gif';
+                    }
+                    
+                    // Ignorar imágenes de generation-i o generation-ii sin 'transparent'
+                    if ((url.includes('generation-i') || url.includes('generation-ii')) && !url.includes('transparent')) {
+                        continue;
+                    }
+    
+                    images.push(<div key={url} ><img src={url}  className={className} alt="" /></div>);
+                } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+                    recurse(obj[key]);
+                }
             }
-          }
         }
         recurse(json);
         console.log(images)
@@ -185,7 +200,7 @@ function Pokemon() {
                             <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"><path fill="#33844E" d="m9.55 12l7.35 7.35q.375.375.363.875t-.388.875t-.875.375t-.875-.375l-7.7-7.675q-.3-.3-.45-.675t-.15-.75t.15-.75t.45-.675l7.7-7.7q.375-.375.888-.363t.887.388t.375.875t-.375.875z"/></svg>
                         </div>
                         
-                        <div className="galeriaImagen">
+                        <div className="galeriaImagen" onClick={imgDerecha}>
                             {imagesArray[imagen]}
                         </div>
                         <div onClick={imgDerecha}>
@@ -238,7 +253,7 @@ function Pokemon() {
                                 <td>{moveName.charAt(0).toUpperCase() + moveName.slice(1)}</td>
                                 <td>{level}</td>
                                 <td>
-                                    <button onClick={() => navigate(`/moves/${moveId}`)}>Ver Detalles</button>
+                                    <button onClick={() => navigate(`/moves/${moveName}`)}>Details</button>
                                 </td>
                                 </tr>
                             );

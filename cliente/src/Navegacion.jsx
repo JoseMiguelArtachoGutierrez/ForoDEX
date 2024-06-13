@@ -20,7 +20,7 @@ function Navegacion({ pagina_actual }) {
                     <div>
                         <li className={pagina_actual === 'pokedex' ? 'active' : ''}><Link to="/pokedex">Pokedex</Link></li>
                         <li className={pagina_actual === 'items' ? 'active' : ''}><Link to="/items">Items</Link></li>
-                        <li className={pagina_actual === 'moves' ? 'active' : ''}><Link to="/moves">Moves</Link></li>
+                        <li className={pagina_actual === 'moves' ? 'active' : ''}><Link to="/moves/">Moves</Link></li>
                         <li className={pagina_actual === 'types' ? 'active' : ''}><Link to="/types">Types</Link></li>
                     </div>
                     <div>
@@ -28,9 +28,10 @@ function Navegacion({ pagina_actual }) {
                     </div>
                 </div>
                 <div >
+                {/* onClick={()=>{cerrarSesionSeguro(); navigate("/");}} */}
                     <li className={pagina_actual === 'usuario' ? 'active' : ''}>
                         {usuario ? (
-                            <Link to="/perfil">
+                            <Link to="/profile">
                                 {usuario.photoURL ? (
                                     <img src={usuario.photoURL} alt="Imagen de perfil" className="imagenPerfil" />
                                 ) : (
@@ -54,9 +55,9 @@ function Navegacion({ pagina_actual }) {
                         <div>
                             <div><Link to="/pokedex">Pokedex</Link></div>
                             <div><Link to="/items">Items</Link></div>
-                            <div><Link to="/moves">Moves</Link></div>
+                            <div><Link to="/moves/">Moves</Link></div>
                             <div><Link to="/types">Types</Link></div>
-                            {!usuario ? "" : <div><li><Link to="/foroDEX">ForoDEX</Link></li></div>}
+                            {!usuario ? "" : <div><Link to="/foroDEX">ForoDEX</Link></div>}
                             <div>{usuario ? (
                                 <Link to="/perfil">
                                     {usuario.photoURL ? (

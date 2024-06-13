@@ -17,6 +17,10 @@ import Pokedex from './componentes/Pokedex.jsx';
 import Pokemon from './componentes/Pokemon.jsx';
 import Usuario from './componentes/Usuario.jsx';
 import Forodex from './componentes/Forodex.jsx';
+import Items from './componentes/Items.jsx';
+import Types from './componentes/Types.jsx';
+import Moves from './componentes/Moves.jsx';
+import Perfil from './componentes/Perfil.jsx';
 
 const router = createBrowserRouter([
     {
@@ -24,7 +28,8 @@ const router = createBrowserRouter([
       element: 
       <>
         <Navegacion></Navegacion>
-        
+        <div></div>
+        <Footer></Footer>
       </>,
       errorElement: <h1 className='text-center'>Ruta no válida</h1>
     },
@@ -39,11 +44,51 @@ const router = createBrowserRouter([
       errorElement: <h1 className='text-center'>Ruta no válida</h1>
     },
     {
+      path: "/items",
+      element: 
+      <>
+        <Navegacion pagina_actual='items'></Navegacion>
+        <Items></Items>
+        <Footer></Footer>
+      </>,
+      errorElement: <h1 className='text-center'>Ruta no válida</h1>
+    },
+    {
+      path: "/moves/:nombre?",
+      element: 
+      <>
+        <Navegacion pagina_actual='moves'></Navegacion>
+        <Moves></Moves>
+        <Footer></Footer>
+      </>,
+      errorElement: <h1 className='text-center'>Ruta no válida</h1>
+    },
+    {
+      path: "/types",
+      element: 
+      <>
+        <Navegacion pagina_actual='types'></Navegacion>
+        <Types></Types>
+        <Footer></Footer>
+      </>,
+      errorElement: <h1 className='text-center'>Ruta no válida</h1>
+    },
+    {
       path: "/pokemon/:id",
       element: 
       <>
         <Navegacion></Navegacion>
         <Pokemon></Pokemon>
+        <Footer></Footer>
+      </>,
+      errorElement: <h1 className='text-center'>Ruta no válida</h1>
+    },
+    {
+      path: "/profile",
+      element: 
+      <>
+        <Navegacion pagina_actual='usuario'></Navegacion>
+        <Perfil></Perfil>
         <Footer></Footer>
       </>,
       errorElement: <h1 className='text-center'>Ruta no válida</h1>

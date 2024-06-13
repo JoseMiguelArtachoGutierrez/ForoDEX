@@ -33,6 +33,7 @@
                 color: white;
                 font-family: $fuente-principal;
                 font-size: large;
+                transition: 0.5s ease;
                 &:hover{
                     transition: 0.5s ease;
                     background-color: $color-secundario;
@@ -50,6 +51,12 @@
                 border-right: 3px solid $color-secundario;
                 border-top-right-radius: 5px;
             }
+            @include mediaQuery(mitad){
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                width: 100%;
+                box-sizing: border-box; 
+            }
         }
         &>*:last-child{
             background-color: $color-principal;
@@ -61,6 +68,9 @@
             justify-content: center;
             align-items: center;
             min-height: 35rem;
+            @include mediaQuery(mitad){
+                border-top-right-radius: 0;
+            }
         }
         @include mediaQuery(mobile){
             width: 100%;

@@ -1,0 +1,70 @@
+.componenteTipos{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 10rem);
+    &>section{
+        width: 100%;
+        min-height: calc(100vh - 10rem);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        &>h1{
+            color: $color-cuaternario;
+            font-weight: bold;
+            font-size: 4rem;
+            -webkit-text-stroke-width: 1px;
+            -webkit-text-stroke-color: $color-secundario;
+            font-family:$fuente-principal ;
+            text-align: center;
+        }
+        &>div{
+            width: 95%;
+            overflow-x: scroll;
+            padding: 0.5rem;
+            border: 3px solid $color-secundario;
+            &>table{
+                &>thead{
+                    &>tr{
+                        background-color: $color-secundario;
+                        border-bottom: 3px solid $fondo;
+                        &>th{
+                            padding: 0.5rem;
+                            border-left: 3px solid $fondo;
+                            &:first-child{
+                                border: 0;
+                            }
+                        }   
+                    }
+                }
+                &>tbody{
+                    &>tr{
+                        background-color: $color-terciario;
+                        border-bottom: 3px solid $fondo;
+                        &>*{
+                            padding: 0.5rem;
+                        }
+                        &>td{
+                            border-left: 3px solid $fondo;
+                            text-align: center;
+                            color: $color-secundario;
+                        }
+                        &>th{
+                            background-color: $color-secundario;
+                        }
+                    }
+                }
+                & th{
+                    &>div{
+                        border: 2px solid $fondo;
+                        border-radius: 15px;
+                        width: 75px;
+                    }
+                }
+            }
+        }
+    }
+}
