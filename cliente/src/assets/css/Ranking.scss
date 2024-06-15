@@ -1,0 +1,175 @@
+.ranking{
+    height: calc(35rem - 50px);
+    &>div{
+        height: 100%;
+        
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 1rem;
+        &>*{
+            width: 100%;
+        }
+        &>h1{
+            text-align: center;
+            color: white;
+            font-family: $fuente-principal;
+        }
+        &>div{
+            display: flex;
+            flex-direction: column;
+            overflow-y: scroll;
+            height: calc(100% - 80px);
+            padding: 1rem;
+            gap: 1rem;
+            border: 3px solid $color-secundario;
+            &>.crearEquipo{
+                width: 100%;
+                border-radius: 5px;
+                background-color: $color-secundario;
+                padding: 1rem;
+                padding-top: 0.5rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                gap: 1rem;
+                &>.headerEquipo{
+                    min-height: 50px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 1rem;
+                    &>*:nth-child(1){
+                        grid-area: usuario;
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-start;
+                        width: 180px;
+                        gap: 1rem;
+                        &>.imagenUsuario{
+                            height: 50px !important;
+                            width: 50px !important;
+                            border: 2px solid white;
+                            border-radius: 50%;
+                            &>*{
+                                width: 100%;
+                                height: 100%;
+                                border-radius: 50%;
+                            }
+                        }
+                        &>p{
+                            width: calc(100% - 1rem - 50px);
+                            margin: 0;
+                            font-family: $fuente-principal;
+                            color: white;
+                            font-weight: bold;
+                            
+                        }
+                    }
+                    &>*:nth-child(2){
+                        grid-area: titulo;
+                        
+                        border-radius: 5px;
+                        border: 0;
+                        outline:none;
+                        color: white;
+                        font-family: $fuente-principal;
+                        font-size: x-large;
+                        width: calc(100% - 246px - 2rem);
+                        text-align: center;
+                        &::placeholder{
+                            color: $color-secundario;
+                            font-family: $fuente-principal;
+                            font-size: x-large;
+                            text-align: center;
+                            font-weight: bold;
+                        }
+                        &.error::placeholder{
+                            color: red;
+                        }
+                        &:not(h1){
+                            background-color: $color-terciario;
+                        }
+                    }
+                    &>*:nth-child(3){
+                        grid-area: svg;
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        flex-direction: column;
+                        align-items: center;
+                        position: relative;
+                        &>p{
+                            margin: 0;
+                            position: absolute;
+                            top: 100%;
+                            color: white;
+                            font-family: $fuente-principal;
+                        }
+                        &.estrellita{
+                            &>svg{
+                                transition: 0.5s ease;
+                                &:hover{
+                                    cursor: pointer;
+                                    transition: 0.5s ease;
+                                    transform: scale(1.1);
+                                    & *{
+                                        transition: 0.5s ease;
+                                        fill: $color-terciario;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    @include mediaQuery(mitad){
+                        display: grid;
+                        grid-template-areas: 
+                            "usuario svg"
+                            "titulo titulo";
+                        grid-gap: 10px; 
+                        &>*:nth-child(1){
+                            width: auto;
+                        }
+                        &>*:nth-child(2){
+                            width: 100%;
+                        }
+                    }
+                }
+                &>.bodyEquipo{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    gap: 1rem;
+                    width: 100%;
+                    height: calc(100% - 50px);
+                    &>*{
+                        height: 100px;
+                        width: 100px;
+                        border-radius: 50px;
+                        background-color: $color-terciario;
+                        padding: 1rem;
+                        position: relative;
+                        transition: 0.5s ease;
+                        &>img{
+                            width: 100%;
+                            height: 100%;
+                        }
+                        &>svg{
+                            position: absolute;
+                            top: 0.75rem;
+                            right: 1rem;
+                        }
+                        &.contenedorCreandoUnEquipo:hover{
+                            cursor: pointer;
+                            transition: 0.5s ease;
+                            transform: scale(1.1);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

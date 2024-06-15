@@ -1,11 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from './ConfiguracionUsuario'; // Importa useAuth
 import { useNavigate } from "react-router-dom";
+import { ref, get, onValue } from 'firebase/database';
+import { database } from './Firebase';
 
 function Navegacion({ pagina_actual }) {
     const { usuario, cerrarSesion } = useAuth(); // Obtén el usuario del contexto de autenticación y la función de cerrar sesión
     const navigate = useNavigate();
+    const [userPhotoURL, setUserPhotoURL] = useState("");
+
+    useEffect(() => {
+        if (usuario) {
+            const userRealtimeRef = ref(database, `Usuario/${usuario.uid}/img`);
+
+            // Obtener la imagen de perfil inicial
+            get(userRealtimeRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    setUserPhotoURL(snapshot.val());
+                } else {
+                    console.log("No data available");
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
+
+            // Establecer un listener para cambios en tiempo real
+            const unsubscribe = onValue(userRealtimeRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    setUserPhotoURL(snapshot.val());
+                } else {
+                    console.log("No data available");
+                }
+            });
+
+            // Cleanup: desuscribirse del listener cuando el componente se desmonte
+            return () => unsubscribe();
+        }
+    }, [usuario]);
+
     async function cerrarSesionSeguro() {
         navigate("/");
         await cerrarSesion()
@@ -32,8 +65,8 @@ function Navegacion({ pagina_actual }) {
                     <li className={pagina_actual === 'usuario' ? 'active' : ''}>
                         {usuario ? (
                             <Link to="/profile">
-                                {usuario.photoURL ? (
-                                    <img src={usuario.photoURL} alt="Imagen de perfil" className="imagenPerfil" />
+                                {userPhotoURL!="" ? (
+                                    <img src={userPhotoURL} alt="Imagen de perfil" className="imagenPerfil" />
                                 ) : (
                                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" className='svgUsuario' viewBox="0 0 24 24"><g fill="none" stroke="#ffffff" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10"/><path strokeLinecap="round" strokeLinejoin="round" d="M12 15a3 3 0 1 0 0-6a3 3 0 0 0 0 6"/><path d="M2 12h7m6 0h7"/></g></svg>
                                 )}
@@ -59,9 +92,9 @@ function Navegacion({ pagina_actual }) {
                             <div><Link to="/types">Types</Link></div>
                             {!usuario ? "" : <div><Link to="/foroDEX">ForoDEX</Link></div>}
                             <div>{usuario ? (
-                                <Link to="/perfil">
-                                    {usuario.photoURL ? (
-                                        <img src={usuario.photoURL} alt="Imagen de perfil" className="imagenPerfil" />
+                                <Link to="/profile">
+                                    {userPhotoURL!="" ? (
+                                        <img src={userPhotoURL} alt="Imagen de perfil" className="imagenPerfil" />
                                     ) : (
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" className='svgUsuario' viewBox="0 0 24 24"><g fill="none" stroke="#ffffff" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10"/><path strokeLinecap="round" strokeLinejoin="round" d="M12 15a3 3 0 1 0 0-6a3 3 0 0 0 0 6"/><path d="M2 12h7m6 0h7"/></g></svg>
                                     )}

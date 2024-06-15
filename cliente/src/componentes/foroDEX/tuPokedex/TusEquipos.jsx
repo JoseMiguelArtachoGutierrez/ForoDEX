@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { doc, setDoc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
-import { db } from '../../../Firebase';
+import { ref, onValue, get, push, set, query, orderByChild, equalTo, remove } from 'firebase/database'; 
+import { db, database } from '../../../Firebase';
 import { useAuth } from '../../../ConfiguracionUsuario';
 
 function TusEquipos({favorito}) {
@@ -12,10 +13,58 @@ function TusEquipos({favorito}) {
     const [titulo, setTitulo] = useState('');
     const [error, setError] = useState({titulo:false,pokemons:false})
     const [buscador,setbuscador] =useState('')
+    const [userName, setUserName] = useState('');
+    const [img, setImg] = useState('');
+    const [arrayPublicaciones, setArrayPublicaciones] = useState([])
+
     useEffect(() => {
         const fetchPokedex = async () => {
-            await cargarDatosFirebase()
+            await cargarDatosFirebase();
         };
+
+        if (usuario) {
+            const userRef = ref(database, `Usuario/${usuario.uid}`);
+
+            const fetchUserData = async () => {
+                // Cargar datos de la Realtime Database
+                const snapshot = await get(userRef);
+                if (snapshot.exists()) {
+                    const userData = snapshot.val();
+                    setUserName(userData.userName);
+                    setImg(userData.img);
+                }
+
+                // Configurar listener para cambios en userName e img
+                onValue(userRef, (snapshot) => {
+                    if (snapshot.exists()) {
+                        const updatedUserData = snapshot.val();
+                        setUserName(updatedUserData.userName);
+                        setImg(updatedUserData.img);
+                    }
+                });
+            };
+
+            fetchUserData();
+            const publicacionesRef = ref(database, 'publicaciones');
+            const fetchPubliData = async () => {
+                // Cargar datos de la Realtime Database
+                const snapshot = await get(publicacionesRef);
+                if (snapshot.exists()) {
+                    const publiData = snapshot.val();
+                    setArrayPublicaciones(publiData);
+                }
+
+                // Configurar listener para cambios en userName e img
+                onValue(publicacionesRef, (snapshot) => {
+                    if (snapshot.exists()) {
+                        const updatedPubliData = snapshot.val();
+                        setArrayPublicaciones(updatedPubliData);
+                    }
+                });
+            };
+            fetchPubliData();
+        }
+
         fetchPokedex();
     }, [usuario]);
     async function cargarDatosFirebase() {
@@ -36,7 +85,6 @@ function TusEquipos({favorito}) {
                     }
                     setDatosUsuario(data);
                     setCargando(false);
-                    console.log(data.tuPokedex);
                 } else {
                     // Si 'tuPokedex' no existe, crearlo junto con 'equipos'
                     await updateDoc(docRef, {
@@ -88,37 +136,60 @@ function TusEquipos({favorito}) {
         setError({titulo:false,pokemons:error.pokemons})
     }
     async function actualizarEquipoBaseDeDatos() {
-        if (arrayEquipo.length==6 && titulo!='') {
-            const docRef= doc(db, "datosUsuario", usuario.uid)
+        if (arrayEquipo.length === 6 && titulo !== '') {
+            const docRef = doc(db, "datosUsuario", usuario.uid);
+            
+            // Obtener el documento actual del usuario
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const datosUsuario = docSnap.data();
+                const equipos = datosUsuario.tuPokedex.equipos || [];
+                
+                // Verificar si ya existe un equipo con el mismo título y pokémons
+                const equipoExistente = equipos.some(equipo => 
+                    equipo.titulo === titulo && 
+                    JSON.stringify(equipo.pokemons) === JSON.stringify(arrayEquipo)
+                );
+                
+                if (equipoExistente) {
+                    console.log("Ya existe un equipo con el mismo título y pokémons.");
+                    // Manejar el error de equipo duplicado aquí
+                    setTitulo('');
+                    setArrayEquipo([]);
+                    setCrearEquipo(false);
+                    return;
+                }
+            }
+    
             const equipo = {
-                titulo:titulo,
-                favorito:false,
-                pokemons:arrayEquipo
+                titulo: titulo,
+                favorito: false,
+                pokemons: arrayEquipo
             };
-
+    
             const updateData = {
                 "tuPokedex.equipos": arrayUnion(equipo) // Reemplaza el campo pokemons con el nuevo valor
             };
+    
             // Actualizamos solo el campo pokemons en Firestore
             await updateDoc(docRef, updateData);
-            setTitulo('')
-            setArrayEquipo([])
-            setCrearEquipo(false)
-            setError({titulo:false,pokemons:false})
+            
+            setTitulo('');
+            setArrayEquipo([]);
+            setCrearEquipo(false);
+            setError({ titulo: false, pokemons: false });
+            
             const updatedDocSnap = await getDoc(docRef);
             const updatedData = updatedDocSnap.data();
-            setDatosUsuario(updatedData)
-        }else{
-            if (titulo=='' && arrayEquipo.length==6) {
-                setError({titulo:true,pokemons:error.pokemons})
-            }else if (arrayEquipo.length!=6 && titulo!='') {
-                setError({titulo:error.titulo,pokemons:arrayEquipo.length})    
-            }else{
-                setError({titulo:true,pokemons:arrayEquipo.length})    
+            setDatosUsuario(updatedData);
+        } else {
+            if (titulo === '' && arrayEquipo.length === 6) {
+                setError({ titulo: true, pokemons: error.pokemons });
+            } else if (arrayEquipo.length !== 6 && titulo !== '') {
+                setError({ titulo: error.titulo, pokemons: arrayEquipo.length });
+            } else {
+                setError({ titulo: true, pokemons: arrayEquipo.length });
             }
-            
-            
-            
         }
     }
     async function cambiarFavorito(index) {
@@ -147,7 +218,68 @@ function TusEquipos({favorito}) {
             setDatosUsuario(updatedData)
         }
     }
-    console.log("error",error)
+    function existeEquipo(uid, titulo, pokemons) {
+        try {
+            // Verificar si arrayPublicaciones es un objeto JSON
+            if (typeof arrayPublicaciones !== 'object' || arrayPublicaciones === null) {
+                throw new Error("arrayPublicaciones no es un objeto JSON válido");
+            }
+    
+            // Variable para almacenar el nombre del equipo encontrado
+            let equipoExistenteNombre = null;
+    
+            // Recorrer las claves del objeto JSON (que representan los nombres de las variables de los equipos)
+            Object.keys(arrayPublicaciones).forEach((key) => {
+                const publicacion = arrayPublicaciones[key];
+                if (publicacion.uid === uid &&
+                    publicacion.titulo === titulo &&
+                    JSON.stringify(publicacion.pokemons) === JSON.stringify(pokemons)) {
+                    equipoExistenteNombre = key;
+                }
+            });
+    
+            if (equipoExistenteNombre) {
+                console.log("Equipo encontrado:", equipoExistenteNombre);
+                return equipoExistenteNombre; // Devuelve el nombre del equipo encontrado
+            } else {
+                console.log("Equipo no encontrado");
+                return false; // Devuelve null si el equipo no se encuentra en el objeto JSON
+            }
+        } catch (error) {
+            console.error("Error al verificar la existencia del equipo:", error);
+            return false; // En caso de error, devuelve false
+        }
+    }
+    // Función para publicar un equipo, ahora utilizando existeEquipo
+    async function publicarEquipo(json) {
+        try {
+            const uid = usuario.uid;
+            const { titulo, pokemons } = json;
+    
+            // Verificar si existe un equipo con los mismos detalles
+            const equipoExiste = await existeEquipo(uid, titulo, pokemons);
+            if (equipoExiste) {
+                // Si existe un equipo con los mismos detalles, elimínalo
+                console.log("Equipo existente encontrado, procediendo a eliminarlo...");
+                await remove(ref(database, `publicaciones/${equipoExiste}`));
+                console.log(`Equipo existente con key ${equipoExiste} eliminado`);
+            } else {
+                // Si no existe un equipo con los mismos detalles, crea uno nuevo
+                const dataToSave = {
+                    titulo: json.titulo,
+                    pokemons: json.pokemons,
+                    uid: uid,
+                    estrellas:[uid]
+                };
+                
+                await push(ref(database, 'publicaciones'), dataToSave);
+                console.log("Nuevo equipo guardado exitosamente");
+            }
+    
+        } catch (error) {
+            console.error("Error al guardar los datos:", error);
+        }
+    }
     let contenido=<div className='tusEquipos'><div className="spinner-border " style={{ width: '3rem', height: '3rem', color:'#004316'}} role="status"><span className="visually-hidden">Loading...</span></div></div>
     if (!cargando) {
         contenido=<section className='tusEquipos'>
@@ -157,13 +289,13 @@ function TusEquipos({favorito}) {
                     <div className='headerEquipo'>
                         <div>
                             <div className='imagenUsuario'>
-                                {usuario.photoURL ? (
-                                    <img src={usuario.photoURL} alt="Imagen de perfil" className="imagenPerfil" />
+                                {img!="" ? (
+                                    <img src={img} alt="Imagen de perfil" className="imagenPerfil" />
                                 ) : (
                                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" className='svgUsuario' viewBox="0 0 24 24"><g fill="none" stroke="#ffffff" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10"/><path strokeLinecap="round" strokeLinejoin="round" d="M12 15a3 3 0 1 0 0-6a3 3 0 0 0 0 6"/><path d="M2 12h7m6 0h7"/></g></svg>
                                 )}
                             </div>
-                            <p>{datosUsuario.userName}</p>
+                            <p>{userName}</p>
                         </div>
                         
                         
@@ -253,25 +385,29 @@ function TusEquipos({favorito}) {
             :
                 <div className='todosTusEquipos'>
                     {datosUsuario.tuPokedex.equipos.map( (element,index)=>{
-                        
+                        let icono = existeEquipo(usuario.uid, element.titulo, element.pokemons)
+                        console.log("porfa", icono)
                         if (!favorito || (favorito && element.favorito)) {
                             return <div className='crearEquipo' key={index}>
                                 <div className='headerEquipo'>
                                     <div>
                                         <div className='imagenUsuario'>
-                                            {usuario.photoURL ? (
-                                                <img src={usuario.photoURL} alt="Imagen de perfil" className="imagenPerfil" />
+                                            {img!="" ? (
+                                                <img src={img} alt="Imagen de perfil" className="imagenPerfil" />
                                             ) : (
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" className='svgUsuario' viewBox="0 0 24 24"><g fill="none" stroke="#ffffff" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10"/><path strokeLinecap="round" strokeLinejoin="round" d="M12 15a3 3 0 1 0 0-6a3 3 0 0 0 0 6"/><path d="M2 12h7m6 0h7"/></g></svg>
                                             )}
                                         </div>
-                                        <p>{datosUsuario.userName}</p>
+                                        <p>{userName}</p>
                                     </div>
                                     
                                     
                                     <h1 style={{margin:0}}>{element.titulo}</h1>
                                     <div >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><g stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path fill="none" stroke-dasharray="14" stroke-dashoffset="14" d="M6 19h12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="14;0"/></path><path fill="#ffffff" d="M12 15 h2 v-6 h2.5 L12 4.5M12 15 h-2 v-6 h-2.5 L12 4.5"><animate attributeName="d" calcMode="linear" dur="1.5s" keyTimes="0;0.7;1" repeatCount="indefinite" values="M12 15 h2 v-6 h2.5 L12 4.5M12 15 h-2 v-6 h-2.5 L12 4.5;M12 15 h2 v-3 h2.5 L12 7.5M12 15 h-2 v-3 h-2.5 L12 7.5;M12 15 h2 v-6 h2.5 L12 4.5M12 15 h-2 v-6 h-2.5 L12 4.5"/></path></g></svg>
+                                        { icono == false ? 
+                                            <svg onClick={()=>{publicarEquipo(element)}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><g stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path fill="none" stroke-dasharray="14" stroke-dashoffset="14" d="M6 19h12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="14;0"/></path><path fill="#ffffff" d="M12 15 h2 v-6 h2.5 L12 4.5M12 15 h-2 v-6 h-2.5 L12 4.5"><animate attributeName="d" calcMode="linear" dur="1.5s" keyTimes="0;0.7;1" repeatCount="indefinite" values="M12 15 h2 v-6 h2.5 L12 4.5M12 15 h-2 v-6 h-2.5 L12 4.5;M12 15 h2 v-3 h2.5 L12 7.5M12 15 h-2 v-3 h-2.5 L12 7.5;M12 15 h2 v-6 h2.5 L12 4.5M12 15 h-2 v-6 h-2.5 L12 4.5"/></path></g></svg>
+                                        :
+                                            <svg onClick={()=>{publicarEquipo(element)}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><mask id="IconifyId19019ae779c5669040"><g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="14" stroke-dashoffset="14" d="M6 19h12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="14;0"/></path><path fill="#fff" d="M12 15 h2 v-6 h2.5 L12 4.5M12 15 h-2 v-6 h-2.5 L12 4.5"><animate attributeName="d" calcMode="linear" dur="1.5s" keyTimes="0;0.7;1" repeatCount="indefinite" values="M12 15 h2 v-6 h2.5 L12 4.5M12 15 h-2 v-6 h-2.5 L12 4.5;M12 15 h2 v-3 h2.5 L12 7.5M12 15 h-2 v-3 h-2.5 L12 7.5;M12 15 h2 v-6 h2.5 L12 4.5M12 15 h-2 v-6 h-2.5 L12 4.5"/></path><g stroke-dasharray="26" stroke-dashoffset="26" transform="rotate(45 13 12)"><path stroke="#000" d="M0 11h24"/><path d="M0 13h22"><animate attributeName="d" dur="6s" repeatCount="indefinite" values="M0 13h22;M2 13h22;M0 13h22"/></path><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.2s" values="26;0"/></g></g></mask><rect width="24" height="24" fill="#ffffff" mask="url(#IconifyId19019ae779c5669040)"/></svg>                                        }
                                         {element.favorito?
                                             <svg onClick={()=>{cambiarFavorito(index)}} xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 256 256"><path fill="#ffffff" d="M240 98a57.63 57.63 0 0 1-17 41l-89.3 90.62a8 8 0 0 1-11.4 0L33 139a58 58 0 0 1 82-82.1l13 12.15l13.09-12.19A58 58 0 0 1 240 98"/></svg>
                                         :

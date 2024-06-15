@@ -21,6 +21,7 @@ import Items from './componentes/Items.jsx';
 import Types from './componentes/Types.jsx';
 import Moves from './componentes/Moves.jsx';
 import Perfil from './componentes/Perfil.jsx';
+import Inicio from './inicio.jsx';
 
 const router = createBrowserRouter([
     {
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
       element: 
       <>
         <Navegacion></Navegacion>
-        <div></div>
+        <Inicio></Inicio>
         <Footer></Footer>
       </>,
       errorElement: <h1 className='text-center'>Ruta no válida</h1>

@@ -1,0 +1,130 @@
+.inicio{
+    width: 100%;
+    min-height: calc(100vh - 5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    &>section:first-child{
+        height: 300px;
+        background-image: url('../img/BANNER.jpg');
+        filter: drop-shadow(0px 0px 30px $color-secundario) invert(0%);
+        background-size: cover;
+        &>div{
+            background-color: #33844e50;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 5rem;
+            text-align: right;
+            &>h1{
+                font-family: $fuente-principal;
+                font-weight: bold;
+                font-size: 5rem;
+                color: $color-terciario;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+                -webkit-text-stroke-width: 1px;
+                -webkit-text-stroke-color: $color-secundario;
+            }
+            &>h3{
+                color: $color-cuaternario;
+                font-weight: 500;
+                -webkit-text-stroke-width: 1px;
+                -webkit-text-stroke-color: $color-secundario;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+            }
+        }
+        @include mediaQuery (mitad){
+            &>div{
+                padding: 0;
+                text-align: center;
+                &>h1{
+                    font-size: 4.5rem;
+                }
+            }
+        }
+    }
+    &>*:nth-child(2){
+        display: flex;
+        padding: 1rem;
+        justify-content: space-around;
+        gap: 2rem;
+        &>article:first-child{
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            &>h2{
+                color: $color-cuaternario;
+                -webkit-text-stroke-width: 1px;
+                -webkit-text-stroke-color: $color-secundario;
+                font-family: $fuente-principal;
+                font-size: 2.5rem;
+                font-weight: bold;
+            }
+            &>p{
+                text-align: justify;
+                color: $color-secundario-claro;
+            }
+        }
+        &>article:last-child{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            &>div{
+                height: 300px;
+                &>img{
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 5px;
+                    border: 3px solid $color-secundario-claro;
+                }
+            }
+        }
+        @include mediaQuery(mitad){
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            &>article{
+                width: 80% !important;
+                text-align: center ;
+                &>p{
+                    text-align: center !important;
+                }
+            }
+        }
+    }
+    &>*:nth-child(3){
+        filter: drop-shadow(0px 0px 30px $color-secundario);
+        display: flex;
+        padding: 2rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+        background-color: $color-secundario-claro;
+        justify-content: space-around;
+        &>article{
+            width: 30%;
+            padding: 1rem;
+            &>*:last-child{
+                &>h3{
+                    color: $color-cuaternario;
+                    font-family: $fuente-principal;
+                    text-align: center;
+                }
+                &>p{
+                    text-align: justify;
+                    color: #00000096;
+                }
+            }
+        }
+        @include mediaQuery(tablet){
+            flex-direction: column;
+            align-items: center;
+            &>article{
+                width: 80%;
+            }
+        }
+    }
+}

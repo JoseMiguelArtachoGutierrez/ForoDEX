@@ -1,13 +1,14 @@
-// src/ChatGlobal.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { database } from '../../../Firebase';
-import { ref, onValue, push, serverTimestamp, set, get } from "firebase/database";
+import { ref, onValue, push, set, get } from "firebase/database";
 import { useAuth } from '../../../ConfiguracionUsuario';
 
 function ChatGlobal() {
+  const { usuario } = useAuth();
+  const chatRef = useRef(null);
   const [chatGlobal, setChatGlobal] = useState([]);
   const [inputValue, setInputValue] = useState('');
-  const { usuario } = useAuth();  // Asumiendo que useAuth proporciona usuario
+  const [detalles, setDetalles] = useState({});
 
   useEffect(() => {
     const chatRef = ref(database, 'ChatGlobal');
@@ -21,6 +22,11 @@ function ChatGlobal() {
           ...data[key]
         }));
         setChatGlobal(chatArray);
+
+        // Obtener detalles (nombre de usuario y imagen) asociados a los UIDs
+        const uniqueUids = new Set(chatArray.map(msg => msg.uid));
+        fetchDetalles(uniqueUids);
+        
       } else {
         setChatGlobal([]);
       }
@@ -37,6 +43,11 @@ function ChatGlobal() {
           ...data[key]
         }));
         setChatGlobal(chatArray);
+
+        // Obtener detalles (nombre de usuario y imagen) asociados a los UIDs
+        const uniqueUids = new Set(chatArray.map(msg => msg.uid));
+        fetchDetalles(uniqueUids);
+        scrollToBottom();
       } else {
         setChatGlobal([]);
       }
@@ -49,8 +60,40 @@ function ChatGlobal() {
     };
   }, []); // El segundo argumento [] indica que el efecto se ejecuta solo una vez al montar el componente
 
+  const fetchDetalles = (uids) => {
+    const promises = [];
+    uids.forEach(uid => {
+      const userRef = ref(database, `Usuario/${uid}`);
+      promises.push(get(userRef).then(snapshot => ({
+        uid,
+        username: snapshot.child('userName').val(),
+        img: snapshot.child('img').val()
+      })));
+    });
+
+    Promise.all(promises)
+      .then(results => {
+        const detallesMap = {};
+        results.forEach(result => {
+          detallesMap[result.uid] = {
+            username: result.username,
+            img: result.img
+          };
+        });
+        setDetalles(detallesMap);
+      })
+      .catch(error => {
+        console.error('Error al obtener detalles:', error);
+      });
+  };
+
   const handleInputChange = (e) => {
-    setInputValue(e.target.value);
+    if (e.key === 'Enter' && !e.shiftKey) {
+        handleSubmit(e);
+    }else{
+      setInputValue(e.target.value);
+    }
+    
   };
 
   const handleSubmit = (e) => {
@@ -60,12 +103,14 @@ function ChatGlobal() {
       const newMessageRef = push(chatRef); // Utiliza push para agregar un nuevo mensaje con una clave única
       const newMessage = {
         uid: usuario.uid,
-        message: inputValue
+        message: inputValue,
+        timestamp: ""
       };
       set(newMessageRef, newMessage)
         .then(() => {
           setInputValue('');
           console.log('Mensaje enviado con éxito.');
+          scrollToBottom();
         })
         .catch(error => {
           console.error('Error al enviar mensaje:', error);
@@ -75,19 +120,36 @@ function ChatGlobal() {
     }
   };
 
+  const scrollToBottom = () => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  };
+
   return (
-    <div>
-      <h1>Chat Global</h1>
-      <div>
+    <div className='globalChat'>
+      <div className='chat' ref={chatRef}>
         {chatGlobal.length > 0 ? (
           chatGlobal.map((msg) => (
-            <div key={msg.id}>
-              <p><strong>{msg.uid}</strong>: {msg.message} <em>{new Date(msg.timestamp).toLocaleString()}</em></p>
+            <div key={msg.id} className={usuario.uid==msg.uid ? "active" : ""}>
+                {detalles[msg.uid] && (
+                  <div className='headerMensaje'>
+                    {detalles[msg.uid].img!="" ? (
+                        <div><img src={detalles[msg.uid].img} alt="Avatar" style={{ width: '30px', height: '30px', borderRadius: '50%' }} /></div>
+                    ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" className='svgUsuario' viewBox="0 0 24 24"><g fill="none" stroke="#ffffff" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10"/><path strokeLinecap="round" strokeLinejoin="round" d="M12 15a3 3 0 1 0 0-6a3 3 0 0 0 0 6"/><path d="M2 12h7m6 0h7"/></g></svg>
+                    )}
+                    <p>{detalles[msg.uid].username}</p>
+                  </div>
+                )}
+                <p>{msg.message}</p>
+                
             </div>
           ))
         ) : (
           <p>No hay mensajes todavía.</p>
         )}
+        {scrollToBottom()}
       </div>
       {usuario ? (
         <form onSubmit={handleSubmit}>
@@ -95,9 +157,9 @@ function ChatGlobal() {
             type="text"
             value={inputValue}
             onChange={handleInputChange}
-            placeholder="Escribe tu mensaje"
+            placeholder="Write your message"
           />
-          <button type="submit">Enviar</button>
+          <button type="submit">Send</button>
         </form>
       ) : (
         <div>Por favor, inicia sesión para enviar mensajes.</div>

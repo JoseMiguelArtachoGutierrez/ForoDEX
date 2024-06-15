@@ -2,12 +2,13 @@
     min-height: 5rem;
     background-color: $color-principal;
     display: flex;
-    
+    z-index: 20;
     align-items: center;
     flex-wrap: wrap;
     padding-left: 2rem;
     padding-right: 2rem;
     gap: 1rem;
+    border-top: 5px solid $color-secundario;
     &>*:first-child{
         position: relative;
         width: 70px;

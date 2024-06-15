@@ -24,11 +24,12 @@ function TusPokemons({favorito}) {
                 const data = docSnap.data();
                 if (data.tuPokedex && data.tuPokedex.pokemons) {
                     setArrayPokedex(data.tuPokedex);
-                    setcargando(false)
+                    
                     console.log(data.tuPokedex)
                 } else {
                     console.log("No tuPokedex field found in the document");
                 }
+                setcargando(false)
             } else {
                 console.log("No such document!");
             }
