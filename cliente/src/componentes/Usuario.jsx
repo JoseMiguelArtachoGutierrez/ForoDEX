@@ -9,7 +9,7 @@ function Usuario() {
     const [userName, setUsername] = useState('');
     const [sesion, setSesion] = useState(true);
     const [registroCompletado, setRegistroCompletado] = useState(false); // Estado para controlar si el registro se ha completado
-    const { iniciarSesionConGoogle, iniciarSesionConCorreoElectronico, registrarUsuarioConCorreoElectronico, cerrarSesion } = useAuth();
+    const { iniciarSesionConGoogle, iniciarSesionConCorreoElectronico, registrarUsuarioConCorreoElectronico,iniciarSesionConGitHub, cerrarSesion } = useAuth();
 
     async function GoogleLogin() {
         try {
@@ -28,6 +28,16 @@ function Usuario() {
             // Aquí podrías realizar acciones adicionales después de iniciar sesión con correo electrónico
         } catch (error) {
             console.error('Error al iniciar sesión con correo electrónico y contraseña:', error.message);
+        }
+    }
+    async function GithubLogin() {
+        console.log("prueba")
+        try {
+            await iniciarSesionConGitHub();
+            navigate("/")
+            // Aquí podrías realizar acciones adicionales después de iniciar sesión con correo electrónico
+        } catch (error) {
+            console.error('Error al iniciar sesión con Github:', error.message);
         }
     }
 
@@ -101,7 +111,7 @@ function Usuario() {
                         <div onClick={GoogleLogin}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><path fill="#33844E" d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301c1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z"/></svg>
                         </div>
-                        <div>
+                        <div onClick={GithubLogin}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 256 256"><path fill="#33844E" d="M216 104v8a56.06 56.06 0 0 1-48.44 55.47A39.8 39.8 0 0 1 176 192v40a8 8 0 0 1-8 8h-64a8 8 0 0 1-8-8v-16H72a40 40 0 0 1-40-40a24 24 0 0 0-24-24a8 8 0 0 1 0-16a40 40 0 0 1 40 40a24 24 0 0 0 24 24h24v-8a39.8 39.8 0 0 1 8.44-24.53A56.06 56.06 0 0 1 56 112v-8a58.14 58.14 0 0 1 7.69-28.32A59.78 59.78 0 0 1 69.07 28A8 8 0 0 1 76 24a59.75 59.75 0 0 1 48 24h24a59.75 59.75 0 0 1 48-24a8 8 0 0 1 6.93 4a59.74 59.74 0 0 1 5.37 47.68A58 58 0 0 1 216 104"/></svg>
                         </div>
                     </div>

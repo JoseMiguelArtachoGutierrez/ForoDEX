@@ -22,11 +22,25 @@ function TusPokemons({favorito}) {
 
             if (docSnap.exists()) {
                 const data = docSnap.data();
+                console.log("aqui estoy", data)
                 if (data.tuPokedex && data.tuPokedex.pokemons) {
                     setArrayPokedex(data.tuPokedex);
                     
                     console.log(data.tuPokedex)
                 } else {
+                    // Actualizar el documento si falta `pokemons[]` en `tuPokedex`
+                    await setDoc(docRef, {
+                        ...data, // Mantener los datos existentes
+                        tuPokedex: {
+                        ...data.tuPokedex,
+                        pokemons: [] // Inicializar pokemons como un array vacío o con los datos iniciales necesarios
+                        }
+                    }, { merge: true }); // Usar merge para mantener otros campos existentes
+
+                    
+                    const docSnap2 = await getDoc(docRef);
+  
+                    setArrayPokedex(docSnap2.data().tuPokedex)
                     console.log("No tuPokedex field found in the document");
                 }
                 setcargando(false)

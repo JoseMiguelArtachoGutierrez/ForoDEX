@@ -2,8 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { auth,db, database } from './Firebase'; // Importa las instancias de autenticación y Firestore desde Firebase
 import { ref, set,get } from 'firebase/database';
-import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'; // Importa funciones de autenticación de Firebase
-
+import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged , GithubAuthProvider} from 'firebase/auth'; // Importa funciones de autenticación de Firebase
 // Crea un contexto de autenticación
 const AuthContext = createContext();
 
@@ -66,7 +65,8 @@ export function AuthProvider({ children }) {
                     if (!userDoc.exists()) {
                         await setDoc(userRef, {
                             uid: uid,
-                            userName: userName
+                            userName: userName,
+                            tuPokedex:{datos:""}
                         });
                     }
     
@@ -87,6 +87,63 @@ export function AuthProvider({ children }) {
                 throw error;
             });
     }
+    function iniciarSesionConGitHub() {
+        const provider = new GithubAuthProvider();
+        return signInWithPopup(auth, provider)
+          .then(async (result) => {
+            // Usuario autenticado exitosamente con GitHub
+            const user = result.user;
+            const email = user.email;
+            const uid = user.uid;
+            const userName = email ? email.split('@')[0] : user.displayName; // Nombre de usuario basado en el email o nombre de GitHub
+            const img = user.photoURL; // La imagen del perfil de GitHub
+      
+            // Referencia al documento del usuario en Firestore
+            const userRef = doc(db, "datosUsuario", uid);
+      
+            // Verificar si el usuario ya está registrado en Firestore
+            const userDoc = await getDoc(userRef);
+      
+            // Referencia al usuario en la Realtime Database
+            const userRealtimeRef = ref(database, `Usuario/${uid}`);
+      
+            // Verificar si el usuario ya está registrado en la Realtime Database
+            const userRealtimeSnapshot = await get(userRealtimeRef);
+      
+            if (userDoc.exists() && userRealtimeSnapshot.exists()) {
+              // El usuario ya está registrado en ambas bases de datos, no hacer nada
+              console.log("Usuario ya registrado en ambas bases de datos");
+              return {
+                ...userDoc.data(),
+                ...userRealtimeSnapshot.val()
+              };
+            } else {
+              // El usuario no está registrado, crear un nuevo documento en ambas bases de datos
+              if (!userDoc.exists()) {
+                await setDoc(userRef, {
+                  uid: uid,
+                  userName: userName,
+                  tuPokedex:{datos:""}
+                });
+              }
+      
+              if (!userRealtimeSnapshot.exists()) {
+                await set(userRealtimeRef, {
+                  userName: userName,
+                  img: img
+                });
+              }
+      
+              console.log("Usuario registrado exitosamente en ambas bases de datos");
+              return { uid: uid, userName: userName, img: img };
+            }
+          })
+          .catch((error) => {
+            // Manejo de errores
+            console.error("Error al registrar/iniciar sesión con GitHub: ", error);
+            throw error;
+          });
+      }
 
     function iniciarSesionConCorreoElectronico(email, password) {
         return signInWithEmailAndPassword(auth, email, password);
@@ -114,7 +171,8 @@ export function AuthProvider({ children }) {
                 // Usuario no existe en Firestore, crear nuevo registro
                 await setDoc(userRefFirestore, {
                     img: "",
-                    userName: userName
+                    userName: userName,
+                    tuPokedex:{datos:""}
                 });
                 console.log("Usuario registrado en Firestore exitosamente");
             } else {
@@ -148,6 +206,7 @@ export function AuthProvider({ children }) {
         usuario,
         iniciarSesionConGoogle,
         iniciarSesionConCorreoElectronico,
+        iniciarSesionConGitHub,
         registrarUsuarioConCorreoElectronico,
         cerrarSesion,
     };
