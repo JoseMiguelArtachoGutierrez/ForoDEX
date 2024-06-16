@@ -59,7 +59,7 @@ function ChatGlobal() {
       chatListener(); // Detener el listener cuando el componente se desmonta
     };
   }, []); // El segundo argumento [] indica que el efecto se ejecuta solo una vez al montar el componente
-
+  // esta
   const fetchDetalles = (uids) => {
     const promises = [];
     uids.forEach(uid => {
@@ -86,7 +86,7 @@ function ChatGlobal() {
         console.error('Error al obtener detalles:', error);
       });
   };
-
+  // Esta función se asegura de que le das a enter
   const handleInputChange = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
         handleSubmit(e);
@@ -95,7 +95,7 @@ function ChatGlobal() {
     }
     
   };
-
+  // Esta función se asegura de añadir el mensaje a la base de datos
   const handleSubmit = (e) => {
     e.preventDefault();
     if (usuario) {
@@ -103,8 +103,7 @@ function ChatGlobal() {
       const newMessageRef = push(chatRef); // Utiliza push para agregar un nuevo mensaje con una clave única
       const newMessage = {
         uid: usuario.uid,
-        message: inputValue,
-        timestamp: ""
+        message: inputValue
       };
       set(newMessageRef, newMessage)
         .then(() => {
@@ -119,7 +118,7 @@ function ChatGlobal() {
       alert('Debes estar autenticado para enviar mensajes.');
     }
   };
-
+  // Esta función se asegura de hacer scroll hasta el final del chat 
   const scrollToBottom = () => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;

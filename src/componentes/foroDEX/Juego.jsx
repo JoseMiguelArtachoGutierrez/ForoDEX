@@ -14,6 +14,7 @@ function Juego() {
     const [cargando, setcargando] = useState(true)
     const [cargandoPokemon, setCargandoPokemon] = useState(true)
     const [imagen, setImagen] =useState("");
+    // Función para buscar un Pokémon aleatorio utilizando la API de Pokémon
     async function buscarPokemon() {
         if (isClickable) {
             setIsClickable(false)
@@ -37,6 +38,7 @@ function Juego() {
         }
         
     }
+    // Función para cambiar la pokeball seleccionada
     function cambiarPokeball(direccion) {
         
         if (direccion=="izquierda") {
@@ -53,6 +55,7 @@ function Juego() {
             }
         }
     }
+    // Función para capturar el Pokémon actual
     function capturarPokemon() {
         
         if (imagen && isClickable) {
@@ -93,6 +96,7 @@ function Juego() {
         }
         
     }
+    // Función para actualizar el número de pokeballs disponibles en la base de datos
     async function actualizarBalls() {
         const docRef= doc(db, "datosUsuario", usuario.uid)
         if (entrenadorPokemon && entrenadorPokemon.ballDiarias !== undefined) {
@@ -117,6 +121,7 @@ function Juego() {
         const updatedData = updatedDocSnap.data();
         setEntrenadorPokemon(updatedData)
     }
+    // Función para actualizar la base de datos con el nuevo Pokémon capturado
     async function actualizarCapturaBaseDeDato() {
         const docRef= doc(db, "datosUsuario", usuario.uid)
         const nuevoPokemon = {
@@ -142,6 +147,7 @@ function Juego() {
         }
         
     }
+    // Función para manejar la animación de captura de Pokémon
     function animacionCaptura(resultado) {
         
         const elementoPokemon= document.getElementById('captura2')
@@ -194,6 +200,7 @@ function Juego() {
             },100)
         }
     }
+    // Función para manejar la animación cuando se encuentra un nuevo Pokémon
     function animacionPokemon() {
         if (document.getElementById('captura')) {
             document.getElementById('captura').style.animation=''
@@ -206,6 +213,7 @@ function Juego() {
             },2700)
         }
     }
+    // Función para extraer imágenes de Pokémon del objeto JSON proporcionado
     function extraerImagenPokemon(json) {
         const shinyImages = [];
         const normalImages = [];

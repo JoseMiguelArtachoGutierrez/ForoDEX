@@ -25,7 +25,7 @@ function Pokemon() {
     const [cargando, setcargando] = useState(true)
     const [listaH,setListaH] =useState("")
 
-
+    // Función para extraer las habilidades mediante una promesa
     function detallesHabilidad(url) {
         return new Promise((resolve, reject) => {
             fetch(url)
@@ -60,57 +60,68 @@ function Pokemon() {
         };
         fetchData();
     }, []);
+    // Función para extraer URLs de imágenes de un objeto JSON y almacenarlas en un array
     function extraerImagenesPokemon(json) {
         const images = [];
-      
+    
+        // Función recursiva para recorrer el objeto JSON
         function recurse(obj) {
             for (let key in obj) {
+                // Si la propiedad es una URL de imagen, se añade al array
                 if (typeof obj[key] === 'string' && obj[key].startsWith('https') && 
                     (obj[key].endsWith('.png') || obj[key].endsWith('.gif') || obj[key].endsWith('.svg'))) {
                     
                     // Verificaciones adicionales
                     const url = obj[key];
                     let className = '';
-    
+
+                    // Clasificar imágenes GIF o de la serie X-Y
                     if (url.endsWith('.gif') || url.includes('/x-y/')) {
                         className = 'gif';
                     }
                     
-                    // Ignorar imágenes de generation-i o generation-ii sin 'transparent'
+                    // Ignorar imágenes de generación I o II que no sean transparentes
                     if ((url.includes('generation-i') || url.includes('generation-ii')) && !url.includes('transparent')) {
                         continue;
                     }
-    
-                    images.push(<div key={url} ><img src={url}  className={className} alt="" /></div>);
+
+                    images.push(<div key={url}><img src={url} className={className} alt="" /></div>);
                 } else if (typeof obj[key] === 'object' && obj[key] !== null) {
                     recurse(obj[key]);
                 }
             }
         }
         recurse(json);
-        console.log(images)
+
+        // Ordenar las imágenes para priorizar las de arte oficial
         images.sort((a, b) => {
             const officialArtwork1 = a.props.children.props.src.includes('official-artwork');
             const officialArtwork2 = b.props.children.props.src.includes('official-artwork');
             
             if (officialArtwork1 && !officialArtwork2) {
-              return -1;
+                return -1;
             } else if (!officialArtwork1 && officialArtwork2) {
-              return 1;
+                return 1;
             } else {
-              return 0;
+                return 0;
             }
         });
-        setImagesArray(images)
+
+        setImagesArray(images);
     }
+
+    // Función para cambiar la imagen actual a la anterior en el array de imágenes
     function imgIzquierda() {
         const nuevaImagen = (imagen - 1 + imagesArray.length) % imagesArray.length;
         setImagen(nuevaImagen);
     }
+
+    // Función para cambiar la imagen actual a la siguiente en el array de imágenes
     function imgDerecha() {
         const nuevaImagen = (imagen + 1) % imagesArray.length;
         setImagen(nuevaImagen);
     }
+
     
     const getMoveIdFromUrl = (url) => {
         const parts = url.split('/');

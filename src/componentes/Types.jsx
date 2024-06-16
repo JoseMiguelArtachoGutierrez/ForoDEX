@@ -26,16 +26,16 @@ function Types() {
         };
         fetchData();
     }, []);
+    // Función para cargar datos desde una URL y actualizar la lista de tipos
     function cargarDatosTipo(urlCargar) {
         const fetchData = async () => {
             try {
                 const response = await fetch(urlCargar);
                 if (!response.ok) {
-                throw new Error('Failed to fetch data');
+                    throw new Error('Failed to fetch data');
                 }
                 const detalles = await response.json();
-                
-                await setListaTipo((data)=>[...data,detalles])
+                await setListaTipo((data) => [...data, detalles])
             } catch (error) {
                 console.log(error.message)
             }
@@ -43,9 +43,10 @@ function Types() {
         fetchData();
     }
 
+    // Función para obtener el multiplicador de daño basado en los tipos de ataque y defensa
     function getDamageMultiplier(attackType, defenseType) {
         const typeDetail = listaMove.find(type => type.name === attackType);
-        console.log("buenas",typeDetail)
+        console.log("buenas", typeDetail)
         if (typeDetail.damage_relations.double_damage_from.some(type => type.name === defenseType)) {
             return 'x2';
         }
@@ -56,7 +57,8 @@ function Types() {
             return 'x0';
         }
         return 'x1';
-    };
+    }
+
 
     return <div className="componenteTipos">
         {cargando ? <div className="spinner-border text-success" style={{ width: '3rem', height: '3rem'}} role="status"><span className="visually-hidden">Loading...</span></div>         

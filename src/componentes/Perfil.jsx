@@ -71,6 +71,7 @@ function Perfil() {
         navigate("/");
         await cerrarSesion()
     }
+    // Maneja el cambio de archivo y establece el archivo seleccionado como la nueva imagen
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
@@ -78,6 +79,7 @@ function Perfil() {
         }
     };
 
+    // Guarda los cambios en el perfil del usuario, incluyendo la subida de una nueva imagen si se seleccionó una
     const handleSave = async () => {
         if (!usuario) return;
 
@@ -112,13 +114,16 @@ function Perfil() {
             setEditar(false);
         }
     };
+
+    // Calcula el total de estrellas en todas las publicaciones
     function totalEstrellas() {
-        let estrellasTotal=-1
-        Object.entries(publicaciones).forEach(([key, element])=>{
-            estrellasTotal+=element.estrellas.length-1
-        })
-        return estrellasTotal
+        let estrellasTotal = -1;
+        Object.entries(publicaciones).forEach(([key, element]) => {
+            estrellasTotal += element.estrellas.length - 1;
+        });
+        return estrellasTotal;
     }
+
 
     return <div className="perfil">
         <div>

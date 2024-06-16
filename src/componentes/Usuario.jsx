@@ -11,6 +11,7 @@ function Usuario() {
     const [registroCompletado, setRegistroCompletado] = useState(false); // Estado para controlar si el registro se ha completado
     const { iniciarSesionConGoogle, iniciarSesionConCorreoElectronico, registrarUsuarioConCorreoElectronico,iniciarSesionConGitHub, cerrarSesion } = useAuth();
     const [errorRegistro, setErrorRegistro] = useState(false);
+    // Función para iniciar sesión con Google
     async function GoogleLogin() {
         try {
             await iniciarSesionConGoogle();
@@ -21,35 +22,37 @@ function Usuario() {
         }
     }
 
+    // Función para iniciar sesión con correo electrónico y contraseña
     async function EmailLogin() {
         try {
             await iniciarSesionConCorreoElectronico(email, password);
-            
             navigate("/")
-            
             // Aquí podrías realizar acciones adicionales después de iniciar sesión con correo electrónico
         } catch (error) {
             console.error('Error al iniciar sesión con correo electrónico y contraseña:', error.message);
         }
     }
+
+    // Función para iniciar sesión con GitHub
     async function GithubLogin() {
         console.log("prueba")
         try {
             await iniciarSesionConGitHub();
             navigate("/")
-            // Aquí podrías realizar acciones adicionales después de iniciar sesión con correo electrónico
+            // Aquí podrías realizar acciones adicionales después de iniciar sesión con GitHub
         } catch (error) {
             console.error('Error al iniciar sesión con Github:', error.message);
         }
     }
 
+    // Función para registrar un usuario con correo electrónico y contraseña
     async function EmailRegister() {
         try {
-            let errorRegis = await registrarUsuarioConCorreoElectronico(email, password,userName);
+            let errorRegis = await registrarUsuarioConCorreoElectronico(email, password, userName);
             console.log(errorRegis)
-            if(!errorRegis){
+            if (!errorRegis) {
                 setErrorRegistro(true)
-            }else{
+            } else {
                 navigate("/")
             }
         } catch (error) {
@@ -57,17 +60,17 @@ function Usuario() {
         }
     }
 
+    // Función para animar y cambiar el estado de sesión
     function vuelta(direccion) {
-
-        document.getElementById("animacion").style.animation= direccion + ' 2s ease forwards'
-        setTimeout(()=>{
+        document.getElementById("animacion").style.animation = direccion + ' 2s ease forwards'
+        setTimeout(() => {
             setSesion(!sesion)
-        },1000)
-        setTimeout(()=>{
-            document.getElementById("animacion").style.animation=''
-        },2000)
-
+        }, 1000)
+        setTimeout(() => {
+            document.getElementById("animacion").style.animation = ''
+        }, 2000)
     }
+
 
     let resultado;
     let titulo;

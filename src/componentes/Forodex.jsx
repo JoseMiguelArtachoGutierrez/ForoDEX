@@ -9,6 +9,7 @@ function Forodex() {
     const [cargando, setcargando] = useState(true)
     const [mostrarSection, setMostrarSection] = useState("juego")
     let seccion
+    // Función para cambiar entre las secciones
     function cambiarSeccion(seccionACambiar) {
         setMostrarSection(seccionACambiar)
         setcargando(false)

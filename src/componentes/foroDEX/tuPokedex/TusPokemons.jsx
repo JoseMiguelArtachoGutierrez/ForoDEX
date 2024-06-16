@@ -15,6 +15,7 @@ function TusPokemons({favorito}) {
         };
         fetchPokedex();
     }, [usuario]);
+    // Función para cargar los datos del usuario desde Firestore
     async function cargarDatosFirebase() {
         if (usuario) {
             const docRef = doc(db, "datosUsuario", usuario.uid);
@@ -49,6 +50,7 @@ function TusPokemons({favorito}) {
             }
         }
     }
+    // Función para eliminar un Pokémon del array de pokemons en tuPokedex
     async function eliminarPokemon(index) {
         const docRef = doc(db, "datosUsuario", usuario.uid);
         let pokemons = [...arrayPokedex.pokemons];
@@ -63,6 +65,7 @@ function TusPokemons({favorito}) {
             });
         }
     }
+    // Función para cambiar el estado 'favorito' de un Pokémon en el array de pokemons en tuPokedex
     async function cambiarFavorito(index) {
         const docRef = doc(db, "datosUsuario", usuario.uid);
         let pokemons = [...arrayPokedex.pokemons];

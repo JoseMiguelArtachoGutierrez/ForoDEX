@@ -55,6 +55,7 @@ function Ranking() {
             setCargando(false)
         }
     }, [usuario]);
+    // Esta función se encarga de manejar la adición o eliminación de la estrella por parte del usuario en una publicación específica.
     function darEstrellita(key) {
         // Verificar si la clave existe en el array de publicaciones
         if (publicaciones.hasOwnProperty(key)) {
@@ -85,6 +86,7 @@ function Ranking() {
             console.error('La clave especificada no existe en las publicaciones');
         }
     }
+    // Esta función parece renderizar las publicaciones ordenadas por el número de estrellas recibidas.
     const renderPublicaciones = () => {
         // Convertir las publicaciones a un array y ordenarlas
         const publicacionesOrdenadas = Object.entries(publicaciones).sort((a, b) => {

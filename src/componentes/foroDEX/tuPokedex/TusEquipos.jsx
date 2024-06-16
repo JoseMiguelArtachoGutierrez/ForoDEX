@@ -67,6 +67,7 @@ function TusEquipos({favorito}) {
 
         fetchPokedex();
     }, [usuario]);
+    // Función para cargar los datos del usuario desde Firestore
     async function cargarDatosFirebase() {
         if (usuario) {
             const docRef = doc(db, "datosUsuario", usuario.uid);
@@ -109,6 +110,7 @@ function TusEquipos({favorito}) {
         }
     }
 
+    // Función para añadir o quitar un Pokémon del equipo
     function añadirPokemonEquipo(sprite) {
         if (arrayEquipo.includes(sprite)) {
             // Si el sprite ya está, elimínalo
@@ -125,6 +127,7 @@ function TusEquipos({favorito}) {
         }
         setError({titulo:error.titulo,pokemons:false})
     }
+    // Función para cambiar el título del equipo
     function cambiarTitulo(event) {
         const { value } = event.target;
         const regex = /^[a-zA-Z0-9(),.\s]*$/;
@@ -135,6 +138,7 @@ function TusEquipos({favorito}) {
         }
         setError({titulo:false,pokemons:error.pokemons})
     }
+    // Función para actualizar el equipo en la base de datos
     async function actualizarEquipoBaseDeDatos() {
         if (arrayEquipo.length === 6 && titulo !== '') {
             const docRef = doc(db, "datosUsuario", usuario.uid);
@@ -192,6 +196,7 @@ function TusEquipos({favorito}) {
             }
         }
     }
+    // Función para cambiar el estado 'favorito' de un equipo
     async function cambiarFavorito(index) {
         const docRef = doc(db, "datosUsuario", usuario.uid);
         let todosLosEquipos = [...datosUsuario.tuPokedex.equipos];
@@ -205,6 +210,7 @@ function TusEquipos({favorito}) {
             setDatosUsuario(updatedData)
         }
     }
+    // Función para eliminar un equipo del array de equipos en tuPokedex
     async function eliminarEquipo(index) {
         const docRef = doc(db, "datosUsuario", usuario.uid);
         let todosLosEquipos = [...datosUsuario.tuPokedex.equipos];
@@ -218,6 +224,7 @@ function TusEquipos({favorito}) {
             setDatosUsuario(updatedData)
         }
     }
+    // Función para verificar la existencia de un equipo específico en Firestore
     function existeEquipo(uid, titulo, pokemons) {
         try {
             // Verificar si arrayPublicaciones es un objeto JSON
