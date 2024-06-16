@@ -79,6 +79,9 @@
                         padding: 0.5rem ;
                         color: $color-secundario;
                     }
+                    &>p{
+                        color: red;
+                    }
                 }
                 &>button{
                     
@@ -92,6 +95,7 @@
                     }
                 }
             }
+            
         }
         &>*:nth-child(4){
             width: 80%;

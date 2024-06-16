@@ -189,11 +189,11 @@ export function AuthProvider({ children }) {
             } else {
                 console.log("El usuario ya existe en Realtime Database");
             }
-    
+            return true
         } catch (error) {
             // Manejo de errores
             console.error("Error al registrar usuario: ", error);
-            throw error;
+            return false;
         }
     }
 

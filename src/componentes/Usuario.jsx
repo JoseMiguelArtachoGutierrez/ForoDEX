@@ -10,7 +10,7 @@ function Usuario() {
     const [sesion, setSesion] = useState(true);
     const [registroCompletado, setRegistroCompletado] = useState(false); // Estado para controlar si el registro se ha completado
     const { iniciarSesionConGoogle, iniciarSesionConCorreoElectronico, registrarUsuarioConCorreoElectronico,iniciarSesionConGitHub, cerrarSesion } = useAuth();
-
+    const [errorRegistro, setErrorRegistro] = useState(false);
     async function GoogleLogin() {
         try {
             await iniciarSesionConGoogle();
@@ -24,7 +24,9 @@ function Usuario() {
     async function EmailLogin() {
         try {
             await iniciarSesionConCorreoElectronico(email, password);
+            
             navigate("/")
+            
             // Aquí podrías realizar acciones adicionales después de iniciar sesión con correo electrónico
         } catch (error) {
             console.error('Error al iniciar sesión con correo electrónico y contraseña:', error.message);
@@ -43,9 +45,13 @@ function Usuario() {
 
     async function EmailRegister() {
         try {
-            await registrarUsuarioConCorreoElectronico(email, password,userName);
-            navigate("/") // Actualiza el estado para indicar que el registro se ha completado
-            // Aquí podrías realizar acciones adicionales después de registrar un nuevo usuario con correo electrónico
+            let errorRegis = await registrarUsuarioConCorreoElectronico(email, password,userName);
+            console.log(errorRegis)
+            if(!errorRegis){
+                setErrorRegistro(true)
+            }else{
+                navigate("/")
+            }
         } catch (error) {
             console.error('Error al registrar usuario con correo electrónico y contraseña:', error.message);
         }
@@ -97,10 +103,17 @@ function Usuario() {
                         </div>
                         <div>
                             <label htmlFor="contraseña">Password: </label>
-                            <input type="password" id='contraseña' onChange={(e) => setPassword(e.target.value)} />
+                            <input type="password" id='contraseña' onChange={(e) => {
+                                if (e.target.value.trim().length>=6) {
+                                    setErrorRegistro(false)
+                                }
+                                setPassword(e.target.value.trim())
+                            }} />
+                            {!sesion && errorRegistro ? <p>Error with registration. The password must be at least 6 characters</p> :""}
+                            
                         </div>
                         {resultado}
-                    </div>
+                    </div>  
                     </div>
                     <div>
                         <span></span>
