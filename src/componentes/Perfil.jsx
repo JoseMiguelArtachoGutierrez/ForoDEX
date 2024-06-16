@@ -113,7 +113,7 @@ function Perfil() {
         }
     };
     function totalEstrellas() {
-        let estrellasTotal=0
+        let estrellasTotal=-1
         Object.entries(publicaciones).forEach(([key, element])=>{
             estrellasTotal+=element.estrellas.length-1
         })

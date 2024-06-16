@@ -1,5 +1,5 @@
 .ranking{
-    height: calc(35rem - 50px);
+    min-height: calc(35rem - 50px);
     &>div{
         height: 100%;
         
@@ -19,7 +19,6 @@
         &>div{
             display: flex;
             flex-direction: column;
-            overflow-y: scroll;
             height: calc(100% - 80px);
             padding: 1rem;
             gap: 1rem;
