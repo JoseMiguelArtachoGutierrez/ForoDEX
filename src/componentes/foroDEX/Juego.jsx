@@ -159,13 +159,13 @@ function Juego() {
             elementoPokemon.style="transition:0.5s ease; width:100px !important;height:100px !important;"
             switch (pokeball) {
                 case 0:
-                    elementoPokemon.src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
+                    elementoPokemon.src=pokeballImg
                     break;
                 case 1:
-                    elementoPokemon.src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png"
+                    elementoPokemon.src=superballImg
                     break;
                 case 2:
-                    elementoPokemon.src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png"
+                    elementoPokemon.src=ultraballImg
                     break;
             
                 default:
