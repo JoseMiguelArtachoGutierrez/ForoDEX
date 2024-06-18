@@ -69,8 +69,11 @@
             width: 100%;
             display: flex;
             justify-content: flex-end;
+            align-items: center;
             padding-right: 3rem;
             &>.pokemonAcapturar{
+                width: 100%;
+                
                 max-width: 200px !important;
                 position: relative;
                 display: flex;
