@@ -40,7 +40,7 @@
             }
         }
         &>h1{
-            font-size: xxx-large;
+            
             color: white;
             font-family: $fuente-principal;
 
@@ -145,7 +145,8 @@
             text-align: center;
         }
         &>div{
-            height: calc(100% - 80px);
+            height: calc(100% - 100px);
+            min-height: 50vh;
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
@@ -169,12 +170,15 @@
                     align-items: center;
                     justify-content: space-between;
                     gap: 1rem;
+                    position: relative;
                     &>*:nth-child(1){
                         grid-area: usuario;
                         display: flex;
                         align-items: center;
-                        justify-content: flex-start;
-                        width: 180px;
+                        justify-content: flex-start; 
+                        flex-wrap: wrap;
+                        width: 50%;
+                        // width: calc(100% );
                         gap: 1rem;
                         &>.imagenUsuario{
                             height: 50px !important;
@@ -188,7 +192,6 @@
                             }
                         }
                         &>p{
-                            width: calc(100% - 1rem - 50px);
                             margin: 0;
                             font-family: $fuente-principal;
                             color: white;
@@ -236,6 +239,20 @@
                             color: white;
                             font-family: $fuente-principal;
                         }
+                        &.estrellita{
+                            &>svg{
+                                transition: 0.5s ease;
+                                &:hover{
+                                    cursor: pointer;
+                                    transition: 0.5s ease;
+                                    transform: scale(1.1);
+                                    & *{
+                                        transition: 0.5s ease;
+                                        fill: $color-terciario;
+                                    }
+                                }
+                            }
+                        }
                     }
                     
                     @include mediaQuery(mitad){
@@ -245,10 +262,30 @@
                             "titulo titulo";
                         grid-gap: 10px; 
                         &>*:nth-child(1){
-                            width: auto;
+                            width: 100%;
                         }
                         &>*:nth-child(2){
                             width: 100%;
+                        }
+                    }
+                    @include mediaQuery(mobile){
+                        grid-template-areas: 
+                            "usuario usuario"
+                            "titulo titulo";
+                        &>*:nth-child(1){
+                            flex-direction: column;
+                            align-items: flex-start;
+                            &>*{
+                                width: 100%;
+                                &:last-child{
+                                    text-align: center;
+                                }
+                            }
+                        }    
+                        &>*:nth-child(3){
+                            position: absolute;
+                            top: 0.5rem;
+                            right: 0rem;
                         }
                     }
                 }
@@ -284,6 +321,13 @@
                         }
                     }
                 }
+            }
+        }
+        @include mediaQuery(tablet){
+            height: auto !important;
+            &>div{
+                min-height: 60vh;
+                overflow-y: auto;
             }
         }
     }
