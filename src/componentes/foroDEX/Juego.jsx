@@ -167,7 +167,6 @@ function Juego() {
                 case 2:
                     elementoPokemon.src=ultraballImg
                     break;
-            
                 default:
                     break;
             }

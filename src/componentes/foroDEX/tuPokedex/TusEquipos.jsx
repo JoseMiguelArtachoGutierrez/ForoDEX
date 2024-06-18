@@ -215,6 +215,13 @@ function TusEquipos({favorito}) {
         const docRef = doc(db, "datosUsuario", usuario.uid);
         let todosLosEquipos = [...datosUsuario.tuPokedex.equipos];
         if (index > 0 || index < todosLosEquipos.length) {
+            console.log("claro",usuario.uid,todosLosEquipos[index].titulo,todosLosEquipos[index].pokemons)
+            if(existeEquipo(usuario.uid,todosLosEquipos[index].titulo,todosLosEquipos[index].pokemons)){
+                console.log("buenas existe el equipo")
+                publicarEquipo(todosLosEquipos[index])
+            }else{
+                console.log("buenas no existe el equipo")
+            }
             todosLosEquipos.splice(index, 1);
             await updateDoc(docRef, {
                 'tuPokedex.equipos': todosLosEquipos
