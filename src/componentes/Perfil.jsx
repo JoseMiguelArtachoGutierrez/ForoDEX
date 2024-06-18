@@ -47,10 +47,6 @@ function Perfil() {
                 if (snapshot.exists()) {
                     const publiData = snapshot.val();
                     setpublicaciones(publiData)
-                    // console.log("publi", publiData)
-                    // Object.entries(publicaciones).map(([key, value]) => {
-                    //     console.log(key,value, "perro")
-                    // });
                 }
 
                 // Configurar listener para cambios en userName e img

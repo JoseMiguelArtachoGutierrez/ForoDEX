@@ -102,7 +102,6 @@ function TusEquipos({favorito}) {
                     };
                     setDatosUsuario(newData);
                     setCargando(false);
-                    console.log(newData.tuPokedex);
                 }
             } else {
                 console.log("No such document!");
@@ -156,7 +155,6 @@ function TusEquipos({favorito}) {
                 );
                 
                 if (equipoExistente) {
-                    console.log("Ya existe un equipo con el mismo título y pokémons.");
                     // Manejar el error de equipo duplicado aquí
                     setTitulo('');
                     setArrayEquipo([]);
@@ -215,12 +213,8 @@ function TusEquipos({favorito}) {
         const docRef = doc(db, "datosUsuario", usuario.uid);
         let todosLosEquipos = [...datosUsuario.tuPokedex.equipos];
         if (index > 0 || index < todosLosEquipos.length) {
-            console.log("claro",usuario.uid,todosLosEquipos[index].titulo,todosLosEquipos[index].pokemons)
             if(existeEquipo(usuario.uid,todosLosEquipos[index].titulo,todosLosEquipos[index].pokemons)){
-                console.log("buenas existe el equipo")
                 publicarEquipo(todosLosEquipos[index])
-            }else{
-                console.log("buenas no existe el equipo")
             }
             todosLosEquipos.splice(index, 1);
             await updateDoc(docRef, {
@@ -274,9 +268,7 @@ function TusEquipos({favorito}) {
             const equipoExiste = await existeEquipo(uid, titulo, pokemons);
             if (equipoExiste) {
                 // Si existe un equipo con los mismos detalles, elimínalo
-                console.log("Equipo existente encontrado, procediendo a eliminarlo...");
                 await remove(ref(database, `publicaciones/${equipoExiste}`));
-                console.log(`Equipo existente con key ${equipoExiste} eliminado`);
             } else {
                 // Si no existe un equipo con los mismos detalles, crea uno nuevo
                 const dataToSave = {
@@ -400,7 +392,6 @@ function TusEquipos({favorito}) {
                 <div className='todosTusEquipos'>
                     {datosUsuario.tuPokedex.equipos.map( (element,index)=>{
                         let icono = existeEquipo(usuario.uid, element.titulo, element.pokemons)
-                        console.log("porfa", icono)
                         if (!favorito || (favorito && element.favorito)) {
                             return <div className='crearEquipo' key={index}>
                                 <div className='headerEquipo'>

@@ -72,7 +72,6 @@ function Ranking() {
                 // La cadena no existe en el array, agregarla
                 estrellitas.push(usuarioUid);
             }
-            console.log("entro", estrellitas)
             // Referenciar la ruta en la base de datos
             const publiRef = dbRef(database, `publicaciones/${key}`);
             

@@ -108,7 +108,6 @@ function ChatGlobal() {
       set(newMessageRef, newMessage)
         .then(() => {
           setInputValue('');
-          console.log('Mensaje enviado con éxito.');
           scrollToBottom();
         })
         .catch(error => {

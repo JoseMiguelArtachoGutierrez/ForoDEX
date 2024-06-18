@@ -6,7 +6,6 @@ import { useNavigate, useParams } from "react-router-dom";
 function Moves() {
     const navigate = useNavigate();
     const {nombre} = useParams();
-    console.log("ss",nombre)
     const [buscador, setbuscador]= useState (nombre!=undefined ? nombre : "")
     const [listaMove,setListaMove] = useState([])
     const [cargando, setCargando]= useState(true)

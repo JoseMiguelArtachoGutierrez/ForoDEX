@@ -48,7 +48,6 @@ function Pokemon() {
                 throw new Error('Failed to fetch data');
               }
                 const datosPokemon = await response.json();
-                console.log(datosPokemon);
                 setPokemon(datosPokemon);
                 extraerImagenesPokemon(datosPokemon.sprites)
                 setcargando(false)

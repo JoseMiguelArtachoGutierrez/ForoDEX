@@ -35,7 +35,6 @@ function Usuario() {
 
     // Función para iniciar sesión con GitHub
     async function GithubLogin() {
-        console.log("prueba")
         try {
             await iniciarSesionConGitHub();
             navigate("/")
@@ -49,7 +48,6 @@ function Usuario() {
     async function EmailRegister() {
         try {
             let errorRegis = await registrarUsuarioConCorreoElectronico(email, password, userName);
-            console.log(errorRegis)
             if (!errorRegis) {
                 setErrorRegistro(true)
             } else {

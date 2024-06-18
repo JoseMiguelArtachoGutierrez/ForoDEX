@@ -23,11 +23,9 @@ function TusPokemons({favorito}) {
 
             if (docSnap.exists()) {
                 const data = docSnap.data();
-                console.log("aqui estoy", data)
                 if (data.tuPokedex && data.tuPokedex.pokemons) {
                     setArrayPokedex(data.tuPokedex);
                     
-                    console.log(data.tuPokedex)
                 } else {
                     // Actualizar el documento si falta `pokemons[]` en `tuPokedex`
                     await setDoc(docRef, {

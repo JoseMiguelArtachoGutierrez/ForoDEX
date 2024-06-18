@@ -46,7 +46,6 @@ function Types() {
     // Función para obtener el multiplicador de daño basado en los tipos de ataque y defensa
     function getDamageMultiplier(attackType, defenseType) {
         const typeDetail = listaMove.find(type => type.name === attackType);
-        console.log("buenas", typeDetail)
         if (typeDetail.damage_relations.double_damage_from.some(type => type.name === defenseType)) {
             return 'x2';
         }
