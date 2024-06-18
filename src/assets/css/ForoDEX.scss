@@ -68,11 +68,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: calc(100vh - 25rem);
             min-height: 35rem;
-            &>*{
-                height: 95%;
-            }
+            
             
             @include mediaQuery(mitad){
                 border-top-right-radius: 0;

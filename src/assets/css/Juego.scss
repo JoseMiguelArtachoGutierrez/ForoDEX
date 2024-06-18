@@ -1,9 +1,9 @@
 .juego{
-    margin: 2rem;
     width: 100%;
     border-radius: 5px;
     background-color: $color-cuaternario;
     min-height: 33rem;
+    margin: 1rem;
     padding: 1rem;
     position: relative;
     display: flex;
@@ -75,11 +75,12 @@
                 width: 100%;
                 
                 max-width: 200px !important;
+                height: auto;
                 position: relative;
                 display: flex;
                 justify-content: center;
                 align-items: flex-end;
-                max-height: 200px !important;
+                // max-height: 200px !important;
                 overflow: visible;
                 
                 opacity: 0;
