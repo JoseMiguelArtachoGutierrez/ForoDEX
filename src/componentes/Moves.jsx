@@ -48,7 +48,7 @@ function Moves() {
         {cargando ? <div className="spinner-border text-success" style={{ width: '3rem', height: '3rem'}} role="status"><span className="visually-hidden">Loading...</span></div>
         : <section>
             <h1>Moves</h1>
-            <input type="text" placeholder="Search Move" onChange={(e)=>{setbuscador(e.target.value.toLowerCase())}} />
+            <input type="text" placeholder="Search Move" onChange={(e)=>{setbuscador(e.target.value.toLowerCase())}} value={buscador} />
             <div>
                 <table>
                     <thead>
