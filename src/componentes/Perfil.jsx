@@ -113,9 +113,11 @@ function Perfil() {
 
     // Calcula el total de estrellas en todas las publicaciones
     function totalEstrellas() {
-        let estrellasTotal = -1;
+        let estrellasTotal = 0;
         Object.entries(publicaciones).forEach(([key, element]) => {
-            estrellasTotal += element.estrellas.length - 1;
+            if (element.uid==usuario.uid) {
+                estrellasTotal += element.estrellas.length - 1;
+            }
         });
         return estrellasTotal;
     }
